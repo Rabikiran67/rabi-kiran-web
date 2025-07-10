@@ -48,19 +48,14 @@ export const professionalSkills = [
   { name: 'Python', icon: DiPython },
   { name: 'Java', icon: DiJava },
   { name: 'JavaScript', icon: DiJavascript1 },
-  { name: 'HTML', icon: DiHtml5 },
-  { name: 'CSS', icon: DiCss3 },
   // Frameworks & Libraries
   { name: 'React.js', icon: DiReact },
   { name: 'Redux', icon: SiRedux },
-  { name: 'React Router', icon: SiReactrouter },
   { name: 'Tailwind CSS', icon: SiTailwindcss },
   { name: 'Node.js', icon: DiNodejsSmall },
   { name: 'Express.js', icon: SiExpress },
-  { name: 'Spring Boot', icon: SiSpringboot },
   // Databases & DevOps
   { name: 'MongoDB', icon: DiMongodb },
-  { name: 'MySQL', icon: SiMysql },
   { name: 'Docker', icon: DiDocker },
   { name: 'Git', icon: DiGit },
   { name: 'GitHub', icon: FaGithub },
@@ -90,7 +85,7 @@ export const projects = [
     title: 'Learnify – MERN Stack Online Learning Platform',
     description: 'A comprehensive, full-stack online learning platform built using the MERN stack (MongoDB, Express, React, Node.js). Learnify provides a powerful role-based system for Students, Instructors, and Administrators to deliver and consume educational content.',
     image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=800&fit=crop&crop=center',
-    tags: ['MongoDB', 'Express', 'React', 'Node.js', 'MERN', 'Role-Based', 'Education'],
+    tags: ['React + Vite', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB', 'JWT', 'Passport.js', 'Cloudinary'],
     liveUrl: 'https://learnify-three-black.vercel.app/',
     githubUrl: 'https://github.com/Rabikiran67/Learnify',
     details: `
@@ -112,7 +107,7 @@ export const projects = [
     title: 'ByteEat - Smart Restaurant Ordering',
     description: 'A modern web application designed to streamline the restaurant ordering process. Users can scan a QR code (simulated), browse the menu, customize their items, add them to a cart, and proceed through a simulated checkout and payment process.',
     image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&h=800&fit=crop&crop=center',
-    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'Restaurant', 'Ordering'],
+    tags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'ShadCN UI', 'Genkit', 'Lucide React'],
     liveUrl: 'https://byte-eat.vercel.app/',
     githubUrl: 'https://github.com/Rabikiran67/ByteEat',
     details: `
@@ -203,7 +198,7 @@ export const projects = [
 export const getHomeCodeString = (personalInfo, techSkills) => {
   // Filter out unwanted skills and select key skills to display
   const filteredSkills = techSkills.filter(skill => 
-    !['HTML', 'CSS', 'Redux', 'React Router'].includes(skill.name)
+    !['Redux'].includes(skill.name)
   );
   const keySkills = filteredSkills.slice(0, 9).map(skill => `'${skill.name}'`);
   const firstLine = keySkills.slice(0, 5).join(', ');

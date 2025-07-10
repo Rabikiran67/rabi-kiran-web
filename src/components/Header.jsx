@@ -24,97 +24,128 @@ const Header = ({ toggleTheme, theme }) => {
   const handleNavClick = () => setMobileOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 p-4 bg-dark-background/80 backdrop-blur-sm">
-      <div className="container mx-auto flex justify-between items-center">
-        {/* Logo */}
-        <NavLink to="/" className="text-2xl font-bold text-primary">
-          {personalInfo.initials || personalInfo.name[0]}
-        </NavLink>
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8 items-center">
-          {navLinks.map((link) => (
-            <NavLink 
-              key={link.title} 
-              to={link.path} 
-              className="relative flex flex-col items-center gap-2 transition-colors pb-1 group"
-              style={({ isActive }) => isActive ? activeLinkStyle : undefined}
-            >
-              <span className="flex items-center gap-2">{link.icon} {link.title}</span>
-              {/* Animated uploading bar on hover */}
-              <span className="absolute left-0 -bottom-0.5 h-1 w-full overflow-hidden pointer-events-none">
-                <span className="block h-full w-0 group-hover:w-full bg-gradient-to-r from-primary via-purple-500 to-secondary rounded-full transition-all duration-500 group-hover:animate-upload-bar"></span>
-              </span>
-            </NavLink>
-          ))}
-          {personalInfo.githubRepo && (
-            <a
-              href={personalInfo.githubRepo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-primary/20 hover:bg-primary/40 text-primary font-semibold py-2 px-4 rounded-lg transition-all"
-            >
-              <FiGitBranch />
-              <FiStar />
-            </a>
-          )}
-        </nav>
-        {/* Mobile menu button */}
-        <div className="md:hidden">
+    <header className="sticky top-0 z-50 bg-dark-background/95 backdrop-blur-md border-b border-gray-800/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14 sm:h-16">
+          {/* Logo */}
+          <NavLink to="/" className="text-lg sm:text-xl md:text-2xl font-bold text-primary hover:text-primary/80 transition-colors">
+            {personalInfo.initials || personalInfo.name[0]}
+          </NavLink>
+          
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
+            {navLinks.map((link) => (
+              <NavLink 
+                key={link.title} 
+                to={link.path} 
+                className="relative flex items-center gap-2 text-sm xl:text-base font-medium transition-colors hover:text-primary group"
+                style={({ isActive }) => isActive ? activeLinkStyle : undefined}
+              >
+                <span className="text-lg">{link.icon}</span>
+                <span>{link.title}</span>
+                {/* Animated underline on hover */}
+                <span className="absolute left-0 -bottom-1 h-0.5 w-0 group-hover:w-full bg-primary transition-all duration-300"></span>
+              </NavLink>
+            ))}
+            {personalInfo.githubRepo && (
+              <a
+                href={personalInfo.githubRepo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary font-medium py-2 px-3 rounded-lg transition-all text-sm"
+              >
+                <FiGitBranch className="text-lg" />
+                <FiStar className="text-lg" />
+              </a>
+            )}
+          </nav>
+          
+          {/* Tablet Navigation */}
+          <nav className="hidden md:flex lg:hidden items-center space-x-4">
+            {navLinks.slice(0, 4).map((link) => (
+              <NavLink 
+                key={link.title} 
+                to={link.path} 
+                className="relative flex flex-col items-center gap-1 transition-colors pb-1 group"
+                style={({ isActive }) => isActive ? activeLinkStyle : undefined}
+              >
+                <span className="text-lg">{link.icon}</span>
+                <span className="text-xs">{link.title}</span>
+                <span className="absolute left-0 -bottom-0.5 h-1 w-full overflow-hidden pointer-events-none">
+                  <span className="block h-full w-0 group-hover:w-full bg-gradient-to-r from-primary via-purple-500 to-secondary rounded-full transition-all duration-500 group-hover:animate-upload-bar"></span>
+                </span>
+              </NavLink>
+            ))}
+          </nav>
+          
+          {/* Mobile menu button */}
           <button
-            aria-label="Open menu"
-            className="text-3xl text-primary focus:outline-none"
+            aria-label="Toggle menu"
+            className="md:hidden p-2 rounded-md text-primary hover:text-primary/80 hover:bg-gray-800 transition-colors"
             onClick={() => setMobileOpen(true)}
           >
-            <FiMenu />
+            <FiMenu className="text-2xl" />
           </button>
         </div>
       </div>
-      {/* Mobile Nav Overlay */}
+      
+      {/* Mobile Navigation Overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            key="mobile-nav"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-dark-background/95 flex flex-col items-center justify-center"
+            className="fixed inset-0 z-50"
             onClick={handleNavClick}
           >
-            <button
-              aria-label="Close menu"
-              className="absolute top-6 right-6 text-3xl text-primary focus:outline-none"
-              onClick={e => { e.stopPropagation(); setMobileOpen(false); }}
-            >
-              <FiX />
-            </button>
-            <nav className="flex flex-col gap-8 text-2xl">
-              {navLinks.map((link) => (
-                <NavLink
-                  key={link.title}
-                  to={link.path}
-                  className="flex items-center gap-3 hover:text-primary transition-colors"
-                  style={({ isActive }) => isActive ? activeLinkStyle : undefined}
-                  onClick={handleNavClick}
-                >
-                  {link.icon} {link.title}
-                </NavLink>
-              ))}
-              {personalInfo.githubRepo && (
-                <a
-                  href={personalInfo.githubRepo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-primary/20 hover:bg-primary/40 text-primary font-semibold py-2 px-4 rounded-lg transition-all mt-4"
-                  onClick={handleNavClick}
-                >
-                  <FiGitBranch />
-                  <FiStar />
-                </a>
-              )}
-            </nav>
+            {/* Background Layer */}
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-lg"></div>
+            
+            {/* Menu Container */}
+            <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
+              <button
+                aria-label="Close menu"
+                className="absolute top-4 right-4 p-3 text-white hover:text-primary transition-colors bg-gray-800/80 hover:bg-gray-700/80 rounded-full backdrop-blur-sm"
+                onClick={e => { e.stopPropagation(); setMobileOpen(false); }}
+              >
+                <FiX className="text-2xl" />
+              </button>
+              
+              {/* Menu Background Card */}
+              <div className="bg-gray-900/95 backdrop-blur-xl rounded-2xl p-8 sm:p-12 shadow-2xl border border-gray-600/50 max-w-sm w-full">
+                <nav className="flex flex-col items-center space-y-6 sm:space-y-8">
+                  {navLinks.map((link) => (
+                    <NavLink
+                      key={link.title}
+                      to={link.path}
+                      className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-white hover:text-primary transition-all bg-gray-800/80 hover:bg-gray-700/90 px-6 py-4 rounded-xl backdrop-blur-sm w-full justify-center"
+                      style={({ isActive }) => isActive ? activeLinkStyle : undefined}
+                      onClick={handleNavClick}
+                    >
+                      <span className="text-2xl sm:text-3xl">{link.icon}</span>
+                      {link.title}
+                    </NavLink>
+                  ))}
+                  {personalInfo.githubRepo && (
+                    <a
+                      href={personalInfo.githubRepo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 bg-primary/30 hover:bg-primary/40 text-primary font-bold py-4 px-8 rounded-xl transition-all mt-6 text-lg sm:text-xl backdrop-blur-sm w-full justify-center"
+                      onClick={handleNavClick}
+                    >
+                      <FiGitBranch className="text-2xl" />
+                      <FiStar className="text-2xl" />
+                    </a>
+                  )}
+                </nav>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
+      
       {/* Custom CSS for uploading bar animation */}
       <style>{`
         @keyframes upload-bar {
