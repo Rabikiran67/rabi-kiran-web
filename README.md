@@ -1,60 +1,12 @@
-# Rabi Kiran – Modern Portfolio
+# React + Vite
 
-A fast, modern, and animated developer portfolio built with React, Vite, and Tailwind CSS.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## ✨ Features
-- **Multiple Pages:** Home, About, Skills, Projects, Resume, Contact
-- **Animated UI:** Framer Motion transitions, animated backgrounds, unique loading spinner
-- **Responsive Design:** Mobile-first, sticky navbar, hamburger menu
-- **Optimized Performance:** Lazy loading for images and pages, tree-shaking, bundle analysis
-- **Modern Components:** Spotify card, syntax-highlighted code block, project cards, PDF resume viewer
-- **Contact Form:** Formspree integration, animated send button, dropdown for contact reason
-- **Social Links:** GitHub, LinkedIn, Instagram (animated, accessible)
-- **Particles & Circles:** Subtle, modern animated backgrounds
+Currently, two official plugins are available:
 
-## 🛠️ Tech Stack
-- [React](https://react.dev/)
-- [Vite](https://vitejs.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [React Router](https://reactrouter.com/)
-- [React Icons](https://react-icons.github.io/react-icons/)
-- [Formspree](https://formspree.io/) (Contact form)
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## 🚀 Getting Started
+## Expanding the ESLint configuration
 
-1. **Clone the repo:**
-   ```bash
-   git clone https://github.com/Rabikiran67/rabi-kiran.git
-   cd rabi-kiran
-   ```
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-3. **Start the dev server:**
-   ```bash
-   npm run dev
-   ```
-4. **Build for production:**
-   ```bash
-   npm run build
-   ```
-
-## 📁 Project Structure
-- `src/components/` – Reusable UI components
-- `src/pages/` – Page components (Home, About, Skills, Projects, Resume, Contact)
-- `src/config.js` – Personal info, skills, and project data
-- `public/` – Static assets (images, resume, favicon)
-
-## 📄 Live Demo
-[Portfolio Live](https://your-portfolio-demo-link.com) <!-- Replace with your deployed link -->
-
-## 🙌 Connect with Me
-- [GitHub](https://github.com/Rabikiran67)
-- [LinkedIn](https://www.linkedin.com/in/rabi-kiran-824881239/)
-- [Instagram](https://www.instagram.com/gipsy.exe/)
-
----
-
-> Built and designed by **M Rabi Kiran**. Feel free to connect!
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
