@@ -15,11 +15,6 @@ const Header = ({ toggleTheme, theme }) => {
     { title: 'Contact', path: '/contact', icon: <FiMail /> },
   ];
 
-  const activeLinkStyle = {
-    color: '#8B5CF6',
-    boxShadow: '0 2px #8B5CF6'
-  };
-
   // Close mobile menu on route change
   const handleNavClick = () => setMobileOpen(false);
 
@@ -38,8 +33,11 @@ const Header = ({ toggleTheme, theme }) => {
               <NavLink 
                 key={link.title} 
                 to={link.path} 
-                className="relative flex items-center gap-2 text-sm xl:text-base font-medium transition-colors hover:text-primary group"
-                style={({ isActive }) => isActive ? activeLinkStyle : undefined}
+                className={({ isActive }) =>
+                  `relative flex items-center gap-2 text-sm xl:text-base font-medium transition-colors group hover:text-primary
+                  ${isActive ? 'text-primary' : ''}`
+                }
+                style={{ outline: 'none', border: 'none', boxShadow: 'none' }}
               >
                 <span className="text-lg">{link.icon}</span>
                 <span>{link.title}</span>
@@ -52,10 +50,13 @@ const Header = ({ toggleTheme, theme }) => {
                 href={personalInfo.githubRepo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary font-medium py-2 px-3 rounded-lg transition-all text-sm"
+                className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors text-sm group"
+                style={{ outline: 'none', border: 'none', boxShadow: 'none' }}
               >
                 <FiGitBranch className="text-lg" />
                 <FiStar className="text-lg" />
+                {/* Animated underline on hover */}
+                <span className="absolute left-0 -bottom-1 h-0.5 w-0 group-hover:w-full bg-primary transition-all duration-300"></span>
               </a>
             )}
           </nav>
@@ -67,7 +68,6 @@ const Header = ({ toggleTheme, theme }) => {
                 key={link.title} 
                 to={link.path} 
                 className="relative flex flex-col items-center gap-1 transition-colors pb-1 group"
-                style={({ isActive }) => isActive ? activeLinkStyle : undefined}
               >
                 <span className="text-lg">{link.icon}</span>
                 <span className="text-xs">{link.title}</span>
@@ -119,12 +119,13 @@ const Header = ({ toggleTheme, theme }) => {
                     <NavLink
                       key={link.title}
                       to={link.path}
-                      className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-white hover:text-primary transition-all bg-gray-800/80 hover:bg-gray-700/90 px-6 py-4 rounded-xl backdrop-blur-sm w-full justify-center"
-                      style={({ isActive }) => isActive ? activeLinkStyle : undefined}
+                      className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-white hover:text-primary transition-colors w-full justify-center group"
                       onClick={handleNavClick}
                     >
                       <span className="text-2xl sm:text-3xl">{link.icon}</span>
                       {link.title}
+                      {/* Animated underline on hover */}
+                      <span className="absolute left-0 -bottom-1 h-0.5 w-0 group-hover:w-full bg-primary transition-all duration-300"></span>
                     </NavLink>
                   ))}
                   {personalInfo.githubRepo && (
@@ -132,11 +133,13 @@ const Header = ({ toggleTheme, theme }) => {
                       href={personalInfo.githubRepo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 bg-primary/30 hover:bg-primary/40 text-primary font-bold py-4 px-8 rounded-xl transition-all mt-6 text-lg sm:text-xl backdrop-blur-sm w-full justify-center"
+                      className="flex items-center gap-3 text-primary hover:text-primary/80 font-bold transition-colors mt-6 text-lg sm:text-xl w-full justify-center group"
                       onClick={handleNavClick}
                     >
                       <FiGitBranch className="text-2xl" />
                       <FiStar className="text-2xl" />
+                      {/* Animated underline on hover */}
+                      <span className="absolute left-0 -bottom-1 h-0.5 w-0 group-hover:w-full bg-primary transition-all duration-300"></span>
                     </a>
                   )}
                 </nav>
