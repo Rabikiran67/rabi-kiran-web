@@ -40,7 +40,20 @@ const LazyPDFViewer = ({ src, title, className }) => {
       {!isInView && (
         <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center rounded-lg">
           <div className="text-center">
-            <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+            {/* Unique Orbit Dots Loader */}
+            <div className="relative w-16 h-16 flex items-center justify-center mb-4">
+              {[...Array(6)].map((_, i) => (
+                <span
+                  key={i}
+                  className={`absolute w-3 h-3 rounded-full bg-primary opacity-80 animate-orbit-dot`}
+                  style={{
+                    left: `${32 + 24 * Math.cos((i / 6) * 2 * Math.PI)}px`,
+                    top: `${32 + 24 * Math.sin((i / 6) * 2 * Math.PI)}px`,
+                    animationDelay: `${i * 0.12}s`
+                  }}
+                ></span>
+              ))}
+            </div>
             <div className="text-gray-600 dark:text-gray-300">Loading PDF...</div>
           </div>
         </div>
@@ -52,7 +65,7 @@ const LazyPDFViewer = ({ src, title, className }) => {
           title={title}
           className="w-full h-full rounded-lg"
           onLoad={() => setIsLoaded(true)}
-          style={{ opacity: isLoaded ? 1 : 0 }}
+          style={{ opacity: isLoaded ? 1 : 0, transition: 'opacity 0.35s ease-in-out' }}
         />
       )}
     </div>
@@ -69,7 +82,7 @@ const ResumePage = () => {
           initial={{ opacity: 0, y: -50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
         >
           My Resume
         </motion.h1>
@@ -78,7 +91,7 @@ const ResumePage = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: 'easeInOut' }}
         >
           Here you can view or download my latest resume.
         </motion.p>
@@ -95,7 +108,7 @@ const ResumePage = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.18, ease: 'easeInOut' }}
         >
             <LazyPDFViewer 
                 src={personalInfo.resume}
@@ -109,3 +122,13 @@ const ResumePage = () => {
 };
 
 export default ResumePage;
+
+<style>{`
+@keyframes orbit-dot {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.4); opacity: 1; }
+}
+.animate-orbit-dot {
+  animation: orbit-dot 0.9s cubic-bezier(0.4,0,0.2,1) infinite;
+}
+`}</style>
