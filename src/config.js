@@ -37,7 +37,7 @@ export const personalInfo = {
   location: "Berhampur, Odisha, IN",
   resume: "/resume.pdf", // Path to your resume in the 'public' folder
   avatar: "/avatar.png", // <-- Added avatar path
-  githubRepo: "https://github.com/Rabikiran67/portfolio-v2"
+  githubRepo: "https://github.com/Rabikiran67/rabi-kiran"
 };
 
 // --- SKILLS & TOOLS ---
