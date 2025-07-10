@@ -31,9 +31,9 @@ const Home = () => {
                 I'M <span className="text-primary bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">RABI KIRAN</span>
               </h2>
               <TypeAnimation
-                sequence={personalInfo.titles}
+                sequence={personalInfo.titles.flatMap(title => [title, 1000])}
                 wrapper="h3"
-                speed={200}
+                speed={150}
                 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-secondary"
                 repeat={Infinity}
               />

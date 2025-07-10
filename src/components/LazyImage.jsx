@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const LazyImage = ({ src, alt, className, placeholder = null }) => {
+const LazyImage = ({ src, alt, className, style, placeholder = null }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -37,7 +37,7 @@ const LazyImage = ({ src, alt, className, placeholder = null }) => {
   };
 
   return (
-    <div ref={imgRef} className={`relative overflow-hidden ${className}`}>
+    <div ref={imgRef} className={`relative overflow-hidden`}>
       {/* Loading placeholder */}
       {!isLoaded && isInView && !hasError && (
         <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
@@ -69,7 +69,8 @@ const LazyImage = ({ src, alt, className, placeholder = null }) => {
           alt={alt}
           className={`w-full h-full object-cover transition-all duration-500 ${
             isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-          }`}
+          } ${className || ''}`}
+          style={style}
           onLoad={() => setIsLoaded(true)}
           onError={handleError}
         />

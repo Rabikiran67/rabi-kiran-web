@@ -13,12 +13,9 @@ const Footer = () => {
         <div className="flex justify-between items-center">
           {/* Left: Created with love */}
           <div className="flex-1 text-left text-sm text-gray-600 dark:text-gray-400">
-            Created with <span className="text-red-500">❤️</span> by <span className="text-primary font-semibold">Rabi Kiran</span>
+            Crafted with code & music <span className="text-lg align-middle">🎧</span> by <span className="text-primary font-semibold">Rabi Kiran</span> <span className="text-lg align-middle">🤍</span>
           </div>
           {/* Center: Copyright */}
-          <div className="flex-1 text-center text-sm">
-            © {new Date().getFullYear()} RK. All Rights Reserved.
-          </div>
           {/* Right: Social Icons */}
           <div className="flex-1 flex justify-end space-x-4">
             {socialsToShow.map((social) => {
