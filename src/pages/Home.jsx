@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
+import { animate } from 'animejs';
 // Import the new components and config data
 import { personalInfo, professionalSkills, getHomeCodeString } from '../config';
 import CodeBlock from '../components/CodeBlock';
@@ -8,6 +9,77 @@ import CodeBlock from '../components/CodeBlock';
 const Home = () => {
   // Generate the code string using our function from the config
   const codeString = getHomeCodeString(personalInfo, professionalSkills);
+  const helloRef = useRef(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const animationTimeoutRef = useRef(null);
+  const isAnimatingRef = useRef(false);
+
+  const triggerAnimation = () => {
+    // Prevent multiple rapid triggers using ref for immediate check
+    if (isAnimatingRef.current) {
+      console.log('Animation already running, skipping...'); // Debug log
+      return;
+    }
+    
+    console.log('Auto animation triggered'); // Debug log
+    isAnimatingRef.current = true;
+    setIsAnimating(true);
+    
+    // Clear any existing timeout
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+    
+    if (helloRef.current) {
+      // Only target the letter spans, not the emoji
+      const letterSpans = helloRef.current.querySelectorAll('.letter-span');
+      console.log('Found letter spans:', letterSpans.length); // Debug log
+      
+      if (letterSpans.length > 0) {
+        try {
+          animate(letterSpans, {
+            translateY: '-1rem',
+            rotate: '-90deg',
+            duration: 800,
+            easing: 'easeInOutQuad',
+            delay: (el, i) => i * 50
+          });
+          console.log('Animation started'); // Debug log
+        } catch (error) {
+          console.error('Animation error:', error); // Debug log
+        }
+      } else {
+        console.log('No letter spans found'); // Debug log
+      }
+    } else {
+      console.log('helloRef.current is null'); // Debug log
+    }
+    
+    // Reset animation state after animation completes
+    animationTimeoutRef.current = setTimeout(() => {
+      isAnimatingRef.current = false;
+      setIsAnimating(false);
+    }, 1500);
+  };
+
+  // Set up animation to trigger only once after 1 second
+  useEffect(() => {
+    const animation = animate('.hello-animation span', {
+      y: [
+        { to: '-2.75rem', ease: 'outExpo', duration: 600 },
+        { to: 0, ease: 'outBounce', duration: 800, delay: 100 }
+      ],
+      rotate: {
+        from: '-1turn',
+        delay: 0
+      },
+      delay: (_, i) => i * 50,
+      ease: 'inOutCirc',
+      loopDelay: 1000,
+      loop: true
+    });
+    return () => animation && animation.pause && animation.pause();
+  }, []);
 
   return (
     <>
@@ -24,8 +96,15 @@ const Home = () => {
               transition={{ duration: 0.8 }}
               className="text-center lg:text-left order-1"
             >
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4">
-                Hi There! <span className="inline-block animate-wave">👋</span>
+              <h1 
+                ref={helloRef} 
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 hello-animation"
+              >
+                {'Hello World!'.split('').map((char, index) => (
+                  <span key={index} className="inline-block">
+                    {char === ' ' ? '\u00A0' : char}
+                  </span>
+                ))} <span className="inline-block animate-wave">👋</span>
               </h1>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold mb-4 sm:mb-6 leading-tight">
                 I'M <span className="text-primary bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">RABI KIRAN</span>
@@ -53,12 +132,14 @@ const Home = () => {
         </div>
       </section>
       <div className="max-w-4xl mx-auto mt-12 sm:mt-16 md:mt-20 mb-12 sm:mb-16 md:mb-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">💬 <span className="text-primary">My Story in Bytes</span></h2>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
+          💬 <span className="text-white">My Story in </span><span className="text-primary">Bytes</span>
+        </h2>
         <div className="space-y-4 sm:space-y-6 text-base sm:text-lg lg:text-xl text-dark-text/80 dark:text-gray-300 font-body leading-relaxed">
-          <p>I fell for programming—and I think it's been falling right back… maybe. 🤷‍♂️</p>
-          <p>I'm skilled in <span className="text-primary font-semibold">Java</span>, <span className="text-primary font-semibold">Python</span>, and <span className="text-primary font-semibold">JavaScript</span>, and I thrive on building systems that blend intuitive design with powerful backend architectures.</p>
-          <p>My interests span a wide spectrum—from cloud-native applications and scalable infrastructures to intelligent systems powered by machine learning and computer vision tools like <span className="text-primary font-semibold">NLP</span> and <span className="text-primary font-semibold">OpenCV</span>.</p>
-          <p>I bring ideas to life using frameworks like <span className="text-primary font-semibold">Next.js</span>, <span className="text-primary font-semibold">Node.js</span>, and <span className="text-primary font-semibold">Spring Boot</span>, paired with platforms like <span className="text-primary font-semibold">Docker</span>, <span className="text-primary font-semibold">Linux</span>, and <span className="text-primary font-semibold">GitHub Actions</span> to deliver reliable, efficient, and forward-thinking solutions.</p>
+          <p>I fell for programming—and I think it's been falling right back… slowly but surely.. 🤷‍♂️</p>
+          <p>I code in <span className="text-primary font-semibold">Java</span>, <span className="text-primary font-semibold">Python</span>, and <span className="text-primary font-semibold">JavaScript</span>, and I thrive on building systems that blend intuitive design with powerful backend architectures.</p>
+          <p>I work across cloud-native platforms, scalable backends, and smart systems driven by AI, <span className="text-primary font-semibold">NLP</span>, and computer vision.</p>
+          <p>Using <span className="text-primary font-semibold">React.js</span>, <span className="text-primary font-semibold">Next.js</span>, and <span className="text-primary font-semibold">Node.js</span> alongside <span className="text-primary font-semibold">Docker</span>, <span className="text-primary font-semibold">Linux</span>, and <span className="text-primary font-semibold">GitHub Actions</span>, I build solutions that are fast, scalable, and production-ready.</p>
         </div>
       </div>
     </>

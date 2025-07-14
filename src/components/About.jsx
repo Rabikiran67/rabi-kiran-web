@@ -5,6 +5,7 @@ import { FiSettings } from 'react-icons/fi';
 import SpotifyCard from './SpotifyCard'; // Import the new component
 
 const About = () => {
+
   return (
     <section id="about" className="relative py-20 md:py-32 overflow-hidden">
       <div className="container mx-auto px-4">
@@ -30,7 +31,7 @@ const About = () => {
                 I completed my Bachelor of Technology in Electrical & Electronics Engineering at NIST, Berhampur.
               </p>
               <p>
-                I'm passionate about technology and love turning abstract ideas into practical applications.
+                I find joy in bridging imagination and implementation through thoughtful engineering.
               </p>
               <div>
                 <p>Outside of programming, I enjoy:</p>
