@@ -1,4 +1,4 @@
-# 🚀 M RABI KIRAN - Portfolio
+# 🚀RABI KIRAN - Portfolio
 
 A modern, responsive portfolio website built with React, Vite, and Tailwind CSS. Features a beautiful UI with smooth animations, interactive components, and optimized performance.
 
