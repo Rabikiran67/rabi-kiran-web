@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import { animate } from 'animejs';
@@ -8,13 +8,13 @@ import CodeBlock from '../components/CodeBlock';
 
 const Home = () => {
   // Generate the code string using our function from the config
-  const codeString = getHomeCodeString(personalInfo, professionalSkills);
+  const codeString = useMemo(() => getHomeCodeString(personalInfo, professionalSkills), [personalInfo, professionalSkills]);
   const helloRef = useRef(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const animationTimeoutRef = useRef(null);
   const isAnimatingRef = useRef(false);
 
-  const triggerAnimation = () => {
+  const triggerAnimation = useCallback(() => {
     // Prevent multiple rapid triggers using ref for immediate check
     if (isAnimatingRef.current) {
       console.log('Animation already running, skipping...'); // Debug log
@@ -60,7 +60,13 @@ const Home = () => {
       isAnimatingRef.current = false;
       setIsAnimating(false);
     }, 1500);
-  };
+  }, []);
+
+  // Memoize animation sequence to prevent unnecessary re-renders
+  const animationSequence = useMemo(() => 
+    personalInfo.titles.flatMap(title => [title, 1000]), 
+    [personalInfo.titles]
+  );
 
   // Set up animation to trigger only once after 1 second
   useEffect(() => {
@@ -81,6 +87,16 @@ const Home = () => {
     return () => animation && animation.pause && animation.pause();
   }, []);
 
+  // Memoize the hello world text to prevent unnecessary re-renders
+  const helloWorldText = useMemo(() => 
+    'Hello World!'.split('').map((char, index) => (
+      <span key={index} className="inline-block">
+        {char === ' ' ? '\u00A0' : char}
+      </span>
+    )), 
+    []
+  );
+
   return (
     <>
       <section id="home" className="relative min-h-[calc(100vh-80px)] flex items-center overflow-hidden px-4 sm:px-6 lg:px-8">
@@ -100,17 +116,13 @@ const Home = () => {
                 ref={helloRef} 
                 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 hello-animation"
               >
-                {'Hello World!'.split('').map((char, index) => (
-                  <span key={index} className="inline-block">
-                    {char === ' ' ? '\u00A0' : char}
-                  </span>
-                ))} <span className="inline-block animate-wave">👋</span>
+                {helloWorldText} <span className="inline-block animate-wave">👋</span>
               </h1>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold mb-4 sm:mb-6 leading-tight">
                 I'M <span className="text-primary bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">RABI KIRAN</span>
               </h2>
               <TypeAnimation
-                sequence={personalInfo.titles.flatMap(title => [title, 1000])}
+                sequence={animationSequence}
                 wrapper="h3"
                 speed={150}
                 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-secondary"

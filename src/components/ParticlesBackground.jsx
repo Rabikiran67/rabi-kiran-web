@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
 import Particles from 'react-tsparticles';
 import { loadSlim } from 'tsparticles-slim';
 
@@ -18,7 +18,7 @@ const ParticlesBackground = () => {
       },
       {
         threshold: 0.1,
-        rootMargin: '50px'
+        rootMargin: '100px' // Increased margin for earlier loading
       }
     );
 
@@ -42,15 +42,16 @@ const ParticlesBackground = () => {
     }
   }, []);
 
-  const handleParticlesLoaded = () => {
+  const handleParticlesLoaded = useCallback(() => {
     setIsLoading(false);
-  };
+  }, []);
 
-  const options = {
+  // Memoize options to prevent unnecessary re-renders
+  const options = useMemo(() => ({
     background: {
       color: { value: 'transparent' },
     },
-    fpsLimit: 60,
+    fpsLimit: 30, // Reduced from 60 for better performance
     interactivity: {
       events: {
         onHover: { enable: false },
@@ -66,19 +67,19 @@ const ParticlesBackground = () => {
         enable: true,
         outModes: { default: 'out' },
         random: true,
-        speed: 0.1,
+        speed: 0.05, // Reduced speed for better performance
         straight: false,
       },
       number: {
-        density: { enable: true, area: 800 },
-        value: 100,
+        density: { enable: true, area: 1000 },
+        value: 50, // Reduced from 100 for better performance
       },
-      opacity: { value: { min: 0.3, max: 0.8 } },
+      opacity: { value: { min: 0.2, max: 0.6 } }, // Reduced opacity
       shape: { type: 'circle' },
       size: { value: { min: 1, max: 2 } },
     },
-    detectRetina: true,
-  };
+    detectRetina: false, // Disabled for better performance
+  }), []);
 
   return (
     <div ref={containerRef} className="absolute inset-0 -z-10">
@@ -86,7 +87,7 @@ const ParticlesBackground = () => {
         <>
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-3 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
           <Particles 

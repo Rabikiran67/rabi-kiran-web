@@ -1,5 +1,5 @@
 // src/components/SpotifyCard.jsx
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { FaSpotify, FaPlay, FaPause } from 'react-icons/fa';
 import { spotifyData } from '../config';
 import LazyImage from './LazyImage';
@@ -10,6 +10,7 @@ const SpotifyCard = () => {
   const [duration, setDuration] = useState(0);
   const [audioData, setAudioData] = useState(new Array(24).fill(0));
   const [tempo, setTempo] = useState(1);
+  const [isAudioContextInitialized, setIsAudioContextInitialized] = useState(false);
   const audioRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
@@ -21,12 +22,23 @@ const SpotifyCard = () => {
   const [dragTime, setDragTime] = useState(null);
   const progressBarRef = useRef(null);
 
+  // Memoize audio data array to prevent unnecessary re-renders
+  const initialAudioData = useMemo(() => new Array(24).fill(0), []);
+
+  // Memoize event handlers outside useEffect
+  const updateTime = useCallback(() => {
+    const audio = audioRef.current;
+    if (audio) setCurrentTime(audio.currentTime);
+  }, []);
+
+  const updateDuration = useCallback(() => {
+    const audio = audioRef.current;
+    if (audio) setDuration(audio.duration);
+  }, []);
+
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
 
     audio.addEventListener('timeupdate', updateTime);
     audio.addEventListener('loadedmetadata', updateDuration);
@@ -41,99 +53,101 @@ const SpotifyCard = () => {
       audio.removeEventListener('loadedmetadata', updateDuration);
       audio.removeEventListener('durationchange', updateDuration);
     };
-  }, []);
+  }, [updateTime, updateDuration]);
 
-  // Audio analysis for disco bars
+  // Lazy initialize audio context only when needed
+  const initializeAudioContext = useCallback(async () => {
+    if (isAudioContextInitialized) return;
+    
+    try {
+      if (!audioContextRef.current) {
+        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      
+      if (!analyserRef.current) {
+        analyserRef.current = audioContextRef.current.createAnalyser();
+        analyserRef.current.fftSize = 32;
+        analyserRef.current.smoothingTimeConstant = 0.8;
+      }
+
+      const audio = audioRef.current;
+      if (!audio) return;
+
+      // Only create the MediaElementSourceNode once per audio element
+      if (!mediaSourceRef.current) {
+        mediaSourceRef.current = audioContextRef.current.createMediaElementSource(audio);
+        mediaSourceRef.current.connect(analyserRef.current);
+        analyserRef.current.connect(audioContextRef.current.destination);
+      }
+      
+      setIsAudioContextInitialized(true);
+    } catch (error) {
+      console.log('Audio analysis not supported:', error);
+    }
+  }, [isAudioContextInitialized]);
+
+  // Audio analysis for disco bars - optimized with throttling
   useEffect(() => {
-    if (!isPlaying) {
+    if (!isPlaying || !isAudioContextInitialized) {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
       return;
     }
 
-    const setupAudioAnalysis = async () => {
-      try {
-        if (!audioContextRef.current) {
-          audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        
-        if (!analyserRef.current) {
-          analyserRef.current = audioContextRef.current.createAnalyser();
-          analyserRef.current.fftSize = 32;
-          analyserRef.current.smoothingTimeConstant = 0.8;
-        }
-
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        // Only create the MediaElementSourceNode once per audio element
-        if (!mediaSourceRef.current) {
-          mediaSourceRef.current = audioContextRef.current.createMediaElementSource(audio);
-          mediaSourceRef.current.connect(analyserRef.current);
-          analyserRef.current.connect(audioContextRef.current.destination);
-        }
-
-        const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
-        
-        const updateAudioData = () => {
-          analyserRef.current.getByteFrequencyData(dataArray);
-          
-          // Calculate overall audio intensity for tempo detection (unchanged)
-          const totalIntensity = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
-          const intensityChange = Math.abs(totalIntensity - (window.lastIntensity || 0));
-          window.lastIntensity = totalIntensity;
-          let newTempo = 1;
-          if (intensityChange > 15) {
-            newTempo = 3.5;
-          } else if (intensityChange > 10) {
-            newTempo = 2.2;
-          } else if (intensityChange > 5) {
-            newTempo = 1.4;
-          } else {
-            newTempo = 0.8;
-          }
-          setTempo(prevTempo => prevTempo * 0.7 + newTempo * 0.3);
-
-          // Smoother disco bars: average each bar with its neighbors
-          const newAudioData = [];
-          for (let i = 0; i < 24; i++) {
-            const index = Math.floor(i * dataArray.length / 24);
-            // Get this, previous, and next value for smoothing
-            const prev = dataArray[Math.max(0, index - 1)] || 0;
-            const curr = dataArray[index] || 0;
-            const next = dataArray[Math.min(dataArray.length - 1, index + 1)] || 0;
-            // Weighted average for smoothness
-            const avg = (prev + curr * 2 + next) / 4;
-            const normalizedValue = (avg / 255) ** 0.7;
-            newAudioData.push(normalizedValue);
-          }
-          setAudioData(newAudioData);
-          animationFrameRef.current = requestAnimationFrame(updateAudioData);
-        };
-        
-        updateAudioData();
-      } catch (error) {
-        console.log('Audio analysis not supported:', error);
+    const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+    let frameCount = 0;
+    
+    const updateAudioData = () => {
+      frameCount++;
+      // Only update every 3 frames for better performance
+      if (frameCount % 3 !== 0) {
+        animationFrameRef.current = requestAnimationFrame(updateAudioData);
+        return;
       }
-    };
 
-    setupAudioAnalysis();
+      analyserRef.current.getByteFrequencyData(dataArray);
+      
+      // Calculate overall audio intensity for tempo detection
+      const totalIntensity = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+      const intensityChange = Math.abs(totalIntensity - (window.lastIntensity || 0));
+      window.lastIntensity = totalIntensity;
+      
+      let newTempo = 1;
+      if (intensityChange > 15) {
+        newTempo = 3.5;
+      } else if (intensityChange > 10) {
+        newTempo = 2.2;
+      } else if (intensityChange > 5) {
+        newTempo = 1.4;
+      } else {
+        newTempo = 0.8;
+      }
+      setTempo(prevTempo => prevTempo * 0.7 + newTempo * 0.3);
+
+      // Optimized disco bars calculation
+      const newAudioData = [];
+      for (let i = 0; i < 24; i++) {
+        const index = Math.floor(i * dataArray.length / 24);
+        const curr = dataArray[index] || 0;
+        const normalizedValue = (curr / 255) ** 0.7;
+        newAudioData.push(normalizedValue);
+      }
+      setAudioData(newAudioData);
+      animationFrameRef.current = requestAnimationFrame(updateAudioData);
+    };
+    
+    updateAudioData();
 
     // Resume audio context if tab regains focus
     const handleVisibilityChange = () => {
       const audio = audioRef.current;
       if (!audio) return;
       if (document.visibilityState !== 'visible') {
-        // Pause music when tab is not active
         if (!audio.paused) {
           audio.pause();
         }
       }
-      // Optionally, resume when returning to tab (uncomment below if desired)
-      // else if (audio.paused && isPlaying) {
-      //   audio.play();
-      // }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
@@ -143,34 +157,34 @@ const SpotifyCard = () => {
       }
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [isPlaying]);
+  }, [isPlaying, isAudioContextInitialized]);
 
-  // Drag handlers for progress dot
-  const handleDotMouseDown = (e) => {
+  // Optimized drag handlers
+  const handleDotMouseDown = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
     document.body.style.userSelect = 'none';
     setDragTime(currentTime);
-  };
+  }, [currentTime]);
+
+  // Move updateDrag outside useEffect and make it a useCallback
+  const updateDrag = useCallback((clientX) => {
+    const audio = audioRef.current;
+    if (!audio || !progressBarRef.current || !duration) return;
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const width = rect.width;
+    let percent = x / width;
+    percent = Math.max(0, Math.min(1, percent));
+    const newTime = percent * duration;
+    setDragTime(newTime);
+    audio.currentTime = newTime;
+    setCurrentTime(newTime);
+  }, [duration, currentTime]);
 
   useEffect(() => {
     if (!isDragging) return;
-    
-    const updateDrag = (clientX) => {
-      const audio = audioRef.current;
-      if (!audio || !progressBarRef.current || !duration) return;
-      const rect = progressBarRef.current.getBoundingClientRect();
-      const x = clientX - rect.left;
-      const width = rect.width;
-      let percent = x / width;
-      percent = Math.max(0, Math.min(1, percent));
-      const newTime = percent * duration;
-      setDragTime(newTime);
-      // Live update audio time while dragging
-      audio.currentTime = newTime;
-      setCurrentTime(newTime);
-    };
 
     const handleMouseMove = (e) => {
       e.preventDefault();
@@ -192,74 +206,79 @@ const SpotifyCard = () => {
       document.body.style.userSelect = '';
       setDragTime(null);
     };
+    
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
     window.addEventListener('touchend', handleTouchEnd);
+    
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [isDragging, duration]);
+  }, [isDragging, updateDrag]);
 
-  const handlePlayPause = () => {
-    if (isPlaying) {
-      audioRef.current?.pause();
-      setIsPlaying(false);
+  // Optimized event handlers
+  const handlePlayPause = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (!isAudioContextInitialized) {
+      await initializeAudioContext();
+    }
+
+    if (audio.paused) {
+      await audio.play();
+      setIsPlaying(true);
     } else {
-      audioRef.current?.play();
-      setIsPlaying(true);
+      audio.pause();
+      setIsPlaying(false);
     }
-  };
+  }, [isAudioContextInitialized, initializeAudioContext]);
 
-  const handleSongClick = () => {
-    if (!isPlaying) {
-      audioRef.current?.play();
-      setIsPlaying(true);
-    }
-  };
+  const handleSongClick = useCallback(() => {
+    handlePlayPause();
+  }, [handlePlayPause]);
 
-  const formatTime = (time) => {
-    if (typeof time !== 'number' || isNaN(time) || time < 0) return '0:00';
+  const formatTime = useCallback((time) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
+  }, []);
 
-  const progressPercentage = duration > 0 ? ((isDragging && dragTime !== null ? dragTime : currentTime) / duration) * 100 : 0;
-
-  const handleProgressBarClick = (e) => {
+  const handleProgressBarClick = useCallback((e) => {
     const audio = audioRef.current;
-    if (!audio) return;
-
-    const progressBar = e.currentTarget;
-    const rect = progressBar.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const progressBarWidth = rect.width;
-    const clickPercentage = clickX / progressBarWidth;
+    if (!audio || !progressBarRef.current || !duration) return;
     
-    const newTime = clickPercentage * duration;
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const width = rect.width;
+    const percent = x / width;
+    const newTime = percent * duration;
+    
     audio.currentTime = newTime;
     setCurrentTime(newTime);
-  };
+  }, [duration]);
 
-  const handleProgressBarHover = (e) => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const progressBar = e.currentTarget;
-    const rect = progressBar.getBoundingClientRect();
-    const hoverX = e.clientX - rect.left;
-    const progressBarWidth = rect.width;
-    const hoverPercentage = hoverX / progressBarWidth;
-    const hoverTime = hoverPercentage * duration;
-    if (hoverTime >= 0 && hoverTime <= duration) {
-      setTooltip(formatTime(hoverTime));
-    } else {
-      setTooltip(null);
-    }
-  };
+  const handleProgressBarHover = useCallback((e) => {
+    if (!progressBarRef.current || !duration) return;
+    
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const width = rect.width;
+    const percent = x / width;
+    const hoverTime = percent * duration;
+    
+    setTooltip({
+      time: formatTime(hoverTime),
+      position: e.clientX
+    });
+  }, [duration, formatTime]);
+
+  // Calculate progress percentage
+  const progressPercentage = duration > 0 ? ((isDragging && dragTime !== null ? dragTime : currentTime) / duration) * 100 : 0;
 
   return (
     <div
@@ -432,7 +451,7 @@ const SpotifyCard = () => {
                   {/* Tooltip */}
                   {tooltip && (
                     <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-dark-background text-white text-xs px-2 py-1 rounded shadow-lg pointer-events-none z-10 animate-fade-in-up">
-                      {tooltip}
+                      {tooltip.time}
                     </div>
                   )}
                 </div>

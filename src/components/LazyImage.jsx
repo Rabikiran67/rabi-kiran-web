@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createIntersectionObserver, preloadImage } from '../utils/performance';
 
 const LazyImage = ({ src, alt, className, style, placeholder = null }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -7,7 +8,7 @@ const LazyImage = ({ src, alt, className, style, placeholder = null }) => {
   const imgRef = useRef();
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const observer = createIntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsInView(true);
@@ -16,7 +17,7 @@ const LazyImage = ({ src, alt, className, style, placeholder = null }) => {
       },
       {
         threshold: 0.1,
-        rootMargin: '50px'
+        rootMargin: '100px' // Increased margin for earlier loading
       }
     );
 
@@ -31,17 +32,21 @@ const LazyImage = ({ src, alt, className, style, placeholder = null }) => {
     };
   }, []);
 
-  const handleError = () => {
-    setHasError(true);
-    setIsLoaded(true);
-  };
+  // Preload image when in view
+  useEffect(() => {
+    if (isInView && !isLoaded && !hasError) {
+      preloadImage(src)
+        .then(() => setIsLoaded(true))
+        .catch(() => setHasError(true));
+    }
+  }, [isInView, src, isLoaded, hasError]);
 
   return (
-    <div ref={imgRef} className={`relative overflow-hidden`}>
+    <div ref={imgRef} className={`relative overflow-hidden ${className || ''}`}>
       {/* Loading placeholder */}
       {!isLoaded && isInView && !hasError && (
         <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-6 h-6 border-3 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
       
@@ -69,10 +74,10 @@ const LazyImage = ({ src, alt, className, style, placeholder = null }) => {
           alt={alt}
           className={`w-full h-full object-cover transition-all duration-500 ${
             isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-          } ${className || ''}`}
+          }`}
           style={style}
-          onLoad={() => setIsLoaded(true)}
-          onError={handleError}
+          loading="lazy"
+          decoding="async"
         />
       )}
     </div>

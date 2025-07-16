@@ -15,7 +15,7 @@ import { FaBrain, FaGithub, FaLinkedin, FaInstagram, FaFacebookF, FaEnvelope, Fa
 // --- PERSONAL INFORMATION ---
 export const personalInfo = {
   name: "M RABI KIRAN",
-  initials: "RK.", // For the new logo
+  initials: "{RK}", // For the new logo
   title: "Software Developer",
   titles: [
     "Full Stack Developer",
