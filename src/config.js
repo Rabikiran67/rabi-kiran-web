@@ -126,7 +126,7 @@ export const projects = [
     description: 'A full-stack issue management system built with MongoDB, Express.js, React.js, and Node.js. It enables seamless ticket handling through a role-based structure for Users, Support Staff, and Admins, featuring real-time updates, status tracking, and priority tagging.',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop&crop=center',
     tags: ['MERN', 'Issue Tracker', 'Role-Based', 'Real-Time'],
-    liveUrl: 'https://ticket-raising-platform-5chx.vercel.app/',
+    liveUrl: 'https://ticket-raising-platform-jinv.vercel.app/',
     githubUrl: 'https://github.com/Rabikiran67/Ticket-Raising-Platform',
     details: `
       ### Overview
