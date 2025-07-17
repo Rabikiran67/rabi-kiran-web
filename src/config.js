@@ -143,7 +143,7 @@ export const projects = [
     description: 'A complete sentiment analysis pipeline using IMDB movie reviews. This project combines lexicon-based (VADER) and machine learning (Logistic Regression + TF-IDF) approaches, visualizes data, and provides a user-friendly web UI using Streamlit.',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop&crop=center',
     tags: ['Python', 'NLP', 'Machine Learning', 'Streamlit', 'VADER', 'Logistic Regression'],
-    liveUrl: '',
+    liveUrl: 'https://imdb-sentiment-analysis-mazt9aoekqckucbjktpg4v.streamlit.app/',
     githubUrl: 'https://github.com/Rabikiran67/IMDB-Sentiment-Analysis',
     details: `
       ### Overview
