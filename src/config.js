@@ -84,7 +84,7 @@ export const projects = [
   {
     title: 'Learnify – MERN Stack Online Learning Platform',
     description: 'A comprehensive, full-stack online learning platform built using the MERN stack (MongoDB, Express, React, Node.js). Learnify provides a powerful role-based system for Students, Instructors, and Administrators to deliver and consume educational content.',
-    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=800&fit=crop&crop=center',
+    image: '/project-images/Learnify.png',
     tags: ['React + Vite', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB', 'JWT', 'Passport.js', 'Cloudinary'],
     liveUrl: 'https://learnify-three-black.vercel.app/',
     githubUrl: 'https://github.com/Rabikiran67/Learnify',
@@ -106,7 +106,7 @@ export const projects = [
   {
     title: 'ByteEat - Smart Restaurant Ordering',
     description: 'A modern web application designed to streamline the restaurant ordering process. Users can scan a QR code (simulated), browse the menu, customize their items, add them to a cart, and proceed through a simulated checkout and payment process.',
-    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&h=800&fit=crop&crop=center',
+    image: '/project-images/ByteEat.png',
     tags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'ShadCN UI', 'Genkit', 'Lucide React'],
     liveUrl: 'https://byte-eat.vercel.app/',
     githubUrl: 'https://github.com/Rabikiran67/ByteEat',
@@ -124,7 +124,7 @@ export const projects = [
   {
     title: 'TicketRaisingPlatform – MERN Stack Issue Tracker',
     description: 'A full-stack issue management system built with MongoDB, Express.js, React.js, and Node.js. It enables seamless ticket handling through a role-based structure for Users, Support Staff, and Admins, featuring real-time updates, status tracking, and priority tagging.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop&crop=center',
+    image: '/project-images/Ticket Raising Platform.png',
     tags: ['MERN', 'Issue Tracker', 'Role-Based', 'Real-Time'],
     liveUrl: 'https://ticket-raising-platform-jinv.vercel.app/',
     githubUrl: 'https://github.com/Rabikiran67/Ticket-Raising-Platform',
@@ -141,7 +141,7 @@ export const projects = [
   {
     title: 'IMDB Sentiment Analysis',
     description: 'A complete sentiment analysis pipeline using IMDB movie reviews. This project combines lexicon-based (VADER) and machine learning (Logistic Regression + TF-IDF) approaches, visualizes data, and provides a user-friendly web UI using Streamlit.',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop&crop=center',
+    image: '/project-images/IMDB Sentiment Analysis.png',
     tags: ['Python', 'NLP', 'Machine Learning', 'Streamlit', 'VADER', 'Logistic Regression'],
     liveUrl: 'https://imdb-sentiment-analysis-mazt9aoekqckucbjktpg4v.streamlit.app/',
     githubUrl: 'https://github.com/Rabikiran67/IMDB-Sentiment-Analysis',
@@ -158,20 +158,26 @@ export const projects = [
     `
   },
   {
-    title: 'Fake News Detection',
-    description: 'A machine learning project to classify news articles as real or fake using NLTK, TF-IDF, and Passive Aggressive Classifier.',
+    title: 'Fake News Detector',
+    description: 'A machine learning-based web application for detecting fake news articles using NLP and multiple ML models. Features single and batch analysis, real-time predictions, and model performance metrics.',
     image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=800&fit=crop&crop=center',
-    tags: ['Python', 'NLP', 'Machine Learning', 'Fake News', 'NLTK', 'TF-IDF', 'PA Classifier'],
+    tags: ['Python', 'NLP', 'Machine Learning', 'Fake News', 'Streamlit', 'Scikit-learn', 'NLTK', 'TF-IDF'],
     liveUrl: '',
-    githubUrl: 'https://github.com/Rabikiran67/Fake-News-Detection',
+    githubUrl: 'https://github.com/Rabikiran67/Fake-News-Detector',
     details: `
       ### Overview
-      Fake news detection pipeline with text cleaning, TF-IDF, and PA Classifier.
+      Fake News Detector is a web app that uses NLP and machine learning to classify news articles as real or fake. It supports single text and batch CSV analysis, and displays model performance metrics.
 
       ### Key Features
-      - **Text Cleaning:** NLTK preprocessing.
-      - **Feature Extraction:** TF-IDF vectorization.
-      - **Classification:** Passive Aggressive Classifier.
+      - **Single & Batch Analysis:** Analyze individual articles or upload CSVs for bulk processing.
+      - **Real-Time Predictions:** Instant results with confidence scores.
+      - **Multiple Models:** Logistic Regression, Random Forest, Naive Bayes.
+      - **Text Preprocessing:** Cleaning, tokenization, lemmatization, stopword removal.
+      - **Performance Metrics:** Accuracy, precision, recall, F1-score.
+      - **Streamlit UI:** Interactive and user-friendly interface.
+
+      ### License
+      MIT
     `
   },
   {
