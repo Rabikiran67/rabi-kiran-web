@@ -7,8 +7,8 @@ import {
   DiPython, DiJava, DiJavascript1, DiReact, DiNodejsSmall, DiMongodb, DiGit, DiVisualstudio, DiDocker, DiHtml5, DiCss3
 } from 'react-icons/di';
 import {
-  SiExpress, SiSpringboot, SiMysql, SiRedux, SiReactrouter, SiTailwindcss, SiOpencv, SiPandas, SiNumpy,
-  SiIntellijidea, SiRender, SiVercel, SiPostman, SiJira
+  SiExpress, SiSpringboot, SiMysql, SiRedux, SiReactrouter, SiTailwindcss, SiOpencv, SiPandas,
+  SiIntellijidea, SiRender, SiVercel, SiPostman, SiJira, SiTensorflow, SiPytorch, SiScikitlearn
 } from 'react-icons/si';
 import { FaBrain, FaGithub, FaLinkedin, FaInstagram, FaFacebookF, FaEnvelope, FaTwitter } from 'react-icons/fa';
 
@@ -66,7 +66,9 @@ export const mlAiSkills = [
   { name: 'NLP', icon: FaBrain }, // Using a generic 'brain' icon for NLP
   { name: 'OpenCV', icon: SiOpencv },
   { name: 'Pandas', icon: SiPandas },
-  { name: 'NumPy', icon: SiNumpy },
+  { name: 'Scikit-learn', icon: SiScikitlearn },
+  { name: 'TensorFlow', icon: SiTensorflow },
+  { name: 'PyTorch', icon: SiPytorch },
 ];
 
 export const tools = [

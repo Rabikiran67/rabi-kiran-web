@@ -4,11 +4,25 @@ import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import { projects } from '../config';
 import LazyImage from './LazyImage';
+import ShootingStars from './ShootingStars';
+import TiltCard from './TiltCard';
 
 const Projects = () => {
+  const handleCardClick = (project, event) => {
+    // Don't trigger card click if clicking on the buttons
+    if (event.target.closest('a')) {
+      return;
+    }
+    
+    // If project has a live URL, open it
+    if (project.liveUrl) {
+      window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <section id="projects" className="relative pt-8 sm:pt-12 md:pt-16 pb-16 sm:pb-20 md:pb-32 overflow-hidden px-4 sm:px-6 lg:px-8">
-      
+      <ShootingStars />
       <div className="w-full max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12 sm:mb-16">
@@ -35,17 +49,14 @@ const Projects = () => {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
         {projects.map((project, index) => (
+          <TiltCard key={index} intensity={8}>
           <motion.div
-            key={index}
-            className="group rounded-xl overflow-hidden shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-2 border-transparent hover:border-purple-500 dark:hover:border-purple-400 flex flex-col cursor-pointer hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 hover:-translate-y-2"
+            className={`group rounded-xl overflow-hidden shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-2 border-transparent hover:border-purple-500 dark:hover:border-purple-400 flex flex-col transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-2 ${project.liveUrl ? 'cursor-pointer' : 'cursor-default'}`}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.2 }}
-            whileHover={{ 
-              scale: 1.02,
-              transition: { duration: 0.3 }
-            }}
+            onClick={(e) => handleCardClick(project, e)}
           >
             {/* Image with hover overlay */}
             <div className="relative overflow-hidden group">
@@ -58,7 +69,9 @@ const Projects = () => {
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
                 <div className="text-center text-white px-4">
                   <div className="text-lg sm:text-xl md:text-2xl font-bold mb-2">{project.title}</div>
-                  <div className="text-xs sm:text-sm opacity-90">Click to view details</div>
+                  <div className="text-xs sm:text-sm opacity-90">
+                    {project.liveUrl ? 'Click to view live demo' : 'Click to view details'}
+                  </div>
                 </div>
               </div>
             </div>
@@ -96,6 +109,7 @@ const Projects = () => {
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="flex items-center gap-1 sm:gap-2 text-white hover:text-purple-200 transition-all duration-300 hover:scale-110 transform text-sm sm:text-base"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <FaExternalLinkAlt size={16} className="sm:w-5 sm:h-5" />
                     <span className="font-medium text-white">Live Demo</span>
@@ -107,6 +121,7 @@ const Projects = () => {
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="flex items-center gap-1 sm:gap-2 text-white hover:text-purple-200 transition-all duration-300 hover:scale-110 transform text-sm sm:text-base"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <FaGithub size={16} className="sm:w-5 sm:h-5" />
                     <span className="font-medium text-white">Code</span>
@@ -115,6 +130,7 @@ const Projects = () => {
               </div>
             </div>
           </motion.div>
+            </TiltCard>
         ))}
         </div>
       </div>

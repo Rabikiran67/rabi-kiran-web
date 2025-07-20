@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiSend, FiCheckCircle } from 'react-icons/fi';
 import { personalInfo } from '../config';
 import ParticlesBackground from './ParticlesBackground';
+import ShootingStars from './ShootingStars';
 import LazyImage from './LazyImage';
 import { useForm, ValidationError } from '@formspree/react';
 import { FaPaperPlane } from 'react-icons/fa';
@@ -60,6 +61,7 @@ const Contact = () => {
         transition={{ duration: 0.5, ease: 'easeInOut' }}
       >
         <ParticlesBackground />
+        <ShootingStars />
         {/* Animated corner background design */}
         <div className="absolute bg-primary/20 rounded-full w-96 h-96 -top-20 -left-20 blur-3xl animate-pulse -z-10" />
         <div className="absolute bg-secondary/20 rounded-full w-96 h-96 -bottom-20 -right-20 blur-3xl animate-pulse delay-1000 -z-10" />
@@ -79,17 +81,31 @@ const Contact = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
-            I'm always open to discussing new projects, creative ideas or opportunities to be part of your visions. My inbox is always open, so feel free to send a message!
+            I'm always open to exploring new projects, sharing creative ideas, or contributing to your vision. My inbox is open—feel free to reach out anytime!
           </motion.p>
           {/* Contact Form Box */}
           <div className="w-full max-w-2xl mx-auto">
-            <div className={animatedBorder}>
+            <div className="relative rounded-2xl overflow-hidden">
+              {/* Conic Gradient Background */}
+              <div 
+                className="absolute inset-0"
+                style={{
+                  background: `conic-gradient(from 0deg, #8B5CF6, #EC4899, #8B5CF6, #EC4899, #8B5CF6)`,
+                  opacity: 0.6,
+                  animation: 'bounce 2s ease-in-out infinite',
+                  filter: 'blur(1px)',
+                  boxShadow: '0 0 20px rgba(139, 92, 246, 0.5), 0 0 40px rgba(236, 72, 153, 0.3)'
+                }}
+              />
+              
+              {/* Content Container */}
+              <div className="relative z-10 bg-dark-container rounded-2xl m-1">
               <motion.form
                 onSubmit={handleSubmit}
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="bg-dark-container rounded-2xl p-12 md:p-16 shadow-xl w-full"
+                  className="p-12 md:p-16 shadow-xl w-full"
               >
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2">Your Name</label>
@@ -178,14 +194,14 @@ const Contact = () => {
                   {!buttonFly && <><FiSend /> {state.submitting ? 'Sending...' : 'Send Message'}</>}
                 </motion.button>
               </motion.form>
+              </div>
             </div>
           </div>
           {/* --- SOCIALS & HANDSHAKE SECTION --- */}
           <div className="text-center mt-28 md:mt-40">
-            <h3 className="text-3xl font-bold mb-2">FIND ME ON</h3>
-            <p className="text-lg text-gray-400 mb-8">Feel free to <span className="text-primary">connect</span> with me</p>
+            <h3 className="text-3xl font-bold mb-12">FIND ME ON</h3>
             {/* Social Icons with floating/animated effect */}
-            <div className="flex justify-center gap-6 mb-16">
+            <div className="flex justify-center gap-6 mb-12">
               {personalInfo.socials.map((social, i) => {
                 const IconComponent = social.icon;
                 return (
@@ -203,6 +219,15 @@ const Contact = () => {
                 );
               })}
             </div>
+            {/* "Feel free to connect with me" text positioned under social icons */}
+            <motion.p 
+              className="text-lg text-gray-400 mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.5 }}
+            >
+              Feel free to <span className="text-primary font-semibold">connect</span> with me
+            </motion.p>
             {/* The Handshake Animation with your single image */}
             <div className="relative w-full flex items-center justify-center mb-8">
                 <LazyImage 

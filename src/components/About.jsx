@@ -3,11 +3,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FiSettings } from 'react-icons/fi';
 import SpotifyCard from './SpotifyCard'; // Import the new component
+import ShootingStars from './ShootingStars';
 
 const About = () => {
 
   return (
     <section id="about" className="relative py-20 md:py-32 overflow-hidden">
+      <ShootingStars />
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
           

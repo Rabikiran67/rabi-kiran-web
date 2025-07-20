@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FaDownload } from 'react-icons/fa';
 import { personalInfo } from '../config';
 import ParticlesBackground from '../components/ParticlesBackground';
+import ShootingStars from '../components/ShootingStars';
 
 // Lazy PDF Viewer Component
 const LazyPDFViewer = ({ src, title, className }) => {
@@ -75,7 +76,7 @@ const LazyPDFViewer = ({ src, title, className }) => {
 const ResumePage = () => {
   return (
     <section className="relative py-20 md:py-32 overflow-hidden">
-      
+      <ShootingStars />
       <div className="container mx-auto px-4 text-center">
         <motion.h1 
           className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-purple-600 to-secondary bg-clip-text text-transparent"
