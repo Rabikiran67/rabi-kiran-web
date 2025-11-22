@@ -3,14 +3,33 @@ import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import { animate } from 'animejs';
 // Import the new components and config data
-import { personalInfo, professionalSkills, getHomeCodeString } from '../config';
+import {
+  personalInfo,
+  programmingLanguages,
+  backendSkills,
+  frontendSkills,
+  databaseSkills,
+  toolsVersionControl,
+  conceptSkills,
+  getHomeCodeString
+} from '../config';
 import CodeBlock from '../components/CodeBlock';
 import ShootingStars from '../components/ShootingStars';
 import GradientText from '../components/GradientText';
 
 const Home = () => {
   // Generate the code string using our function from the config
-  const codeString = useMemo(() => getHomeCodeString(personalInfo, professionalSkills), [personalInfo, professionalSkills]);
+  // Combine a representative subset of skills for the code snippet
+  const combinedSkills = useMemo(() => (
+    [
+      ...programmingLanguages,
+      ...backendSkills.slice(0,2),
+      ...frontendSkills.slice(0,2),
+      ...databaseSkills.slice(0,1)
+    ]
+  ), [programmingLanguages, backendSkills, frontendSkills, databaseSkills]);
+
+  const codeString = useMemo(() => getHomeCodeString(personalInfo, combinedSkills), [personalInfo, combinedSkills]);
   const helloRef = useRef(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const animationTimeoutRef = useRef(null);
@@ -151,9 +170,10 @@ const Home = () => {
         </h2>
         <div className="space-y-3 sm:space-y-4 md:space-y-6 text-sm sm:text-base md:text-lg lg:text-xl text-dark-text/80 dark:text-gray-300 font-body leading-relaxed">
           <p>I fell for programming—and I think it's been falling right back… slowly but surely.. 🤷‍♂️</p>
-          <p>I code in <span className="text-primary font-semibold">Java</span>, <span className="text-primary font-semibold">Python</span>, and <span className="text-primary font-semibold">JavaScript</span>, and I thrive on building systems that blend intuitive design with powerful backend architectures.</p>
-          <p>I work across cloud-native platforms, scalable backends, and smart systems driven by AI, <span className="text-primary font-semibold">NLP</span>, and computer vision.</p>
-          <p>Using <span className="text-primary font-semibold">React.js</span>, <span className="text-primary font-semibold">Next.js</span>, and <span className="text-primary font-semibold">Node.js</span> alongside <span className="text-primary font-semibold">Docker</span>, <span className="text-primary font-semibold">Linux</span>, and <span className="text-primary font-semibold">GitHub Actions</span>, I build solutions that are fast, scalable, and production-ready.</p>
+          <p>I code in <span className="text-primary font-semibold">Java</span>, <span className="text-primary font-semibold">JavaScript</span>, and <span className="text-primary font-semibold">SQL</span>, and I thrive on building systems that blend intuitive design with powerful backend architectures.</p>
+          <p>I specialize in <span className="text-primary font-semibold">Spring Boot</span>, <span className="text-primary font-semibold">Spring MVC</span>, <span className="text-primary font-semibold">Spring Security</span>, and <span className="text-primary font-semibold">Microservices</span> for backend development.</p>
+          <p>On the frontend, I build responsive UIs with <span className="text-primary font-semibold">React.js</span>, <span className="text-primary font-semibold">Material-UI</span>, and <span className="text-primary font-semibold">Redux</span>, delivering seamless user experiences.</p>
+          <p>I work with <span className="text-primary font-semibold">PostgreSQL</span>, <span className="text-primary font-semibold">JPA/Hibernate</span>, and <span className="text-primary font-semibold">Redis</span> for robust data management and caching solutions.</p>
         </div>
       </div>
     </>

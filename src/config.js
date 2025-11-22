@@ -3,14 +3,29 @@
 
 // --- IMPORTS FOR SKILLS (Add new ones) ---
 import React from 'react';
+import { DiJava, DiJavascript1 } from 'react-icons/di';
 import {
-  DiPython, DiJava, DiJavascript1, DiReact, DiNodejsSmall, DiMongodb, DiGit, DiVisualstudio, DiDocker, DiHtml5, DiCss3
-} from 'react-icons/di';
-import {
-  SiExpress, SiSpringboot, SiMysql, SiRedux, SiReactrouter, SiTailwindcss, SiOpencv, SiPandas,
-  SiIntellijidea, SiRender, SiVercel, SiPostman, SiJira, SiTensorflow, SiPytorch, SiScikitlearn
+  SiSpringboot,
+  SiPostgresql,
+  SiRedis,
+  SiJenkins,
+  SiGitlab,
+  SiRedux,
+  SiPostman,
+  SiDocker
 } from 'react-icons/si';
-import { FaBrain, FaGithub, FaLinkedin, FaInstagram, FaFacebookF, FaEnvelope, FaTwitter } from 'react-icons/fa';
+import {
+  FaGithub,
+  FaLinkedin,
+  FaInstagram,
+  FaCode,
+  FaCubes,
+  FaProjectDiagram,
+  FaPuzzlePiece,
+  FaStream,
+  FaSitemap,
+  FaDatabase
+} from 'react-icons/fa';
 
 // --- PERSONAL INFORMATION ---
 export const personalInfo = {
@@ -35,49 +50,56 @@ export const personalInfo = {
   ],
   phone: "8456866626",
   location: "Berhampur, Odisha, IN",
-  resume: "/resume.pdf", // Path to your resume in the 'public' folder
+  resume: "/Rabi Kiran Resume.pdf", // Path to your resume in the 'public' folder
   avatar: "/avatar.png", // <-- Added avatar path
   githubRepo: "https://github.com/Rabikiran67/rabi-kiran-web"
 };
 
-// --- SKILLS & TOOLS ---
-// Replace the old `professionalSkills` and `tools` arrays with these three new arrays.
+// --- UPDATED SKILLS (Categorized) ---
+// Each category matches user-provided structure.
 
-export const professionalSkills = [
-  // Programming Languages
-  { name: 'Python', icon: DiPython },
+export const programmingLanguages = [
   { name: 'Java', icon: DiJava },
   { name: 'JavaScript', icon: DiJavascript1 },
-  // Frameworks & Libraries
-  { name: 'React.js', icon: DiReact },
+  { name: 'SQL', icon: SiPostgresql },
+];
+
+export const backendSkills = [
+  { name: 'Spring Boot', icon: SiSpringboot },
+  { name: 'Spring MVC', icon: SiSpringboot },
+  { name: 'Spring Security', icon: SiSpringboot },
+  { name: 'REST APIs', icon: FaCode },
+  { name: 'Microservices', icon: FaCubes },
+];
+
+export const frontendSkills = [
+  { name: 'React.js', icon: DiJavascript1 },
+  { name: 'Material-UI', icon: FaCode },
   { name: 'Redux', icon: SiRedux },
-  { name: 'Tailwind CSS', icon: SiTailwindcss },
-  { name: 'Node.js', icon: DiNodejsSmall },
-  { name: 'Express.js', icon: SiExpress },
-  // Databases & DevOps
-  { name: 'MongoDB', icon: DiMongodb },
-  { name: 'Docker', icon: DiDocker },
-  { name: 'Git', icon: DiGit },
-  { name: 'GitHub', icon: FaGithub },
+  { name: 'Context API', icon: DiJavascript1 },
 ];
 
-
-export const mlAiSkills = [
-  { name: 'NLP', icon: FaBrain }, // Using a generic 'brain' icon for NLP
-  { name: 'OpenCV', icon: SiOpencv },
-  { name: 'Pandas', icon: SiPandas },
-  { name: 'Scikit-learn', icon: SiScikitlearn },
-  { name: 'TensorFlow', icon: SiTensorflow },
-  { name: 'PyTorch', icon: SiPytorch },
+export const databaseSkills = [
+  { name: 'PostgreSQL', icon: SiPostgresql },
+  { name: 'JPA / Hibernate', icon: FaDatabase },
+  { name: 'Redis', icon: SiRedis },
 ];
 
-export const tools = [
-  { name: 'VS Code', icon: DiVisualstudio  },
-  { name: 'IntelliJ IDEA', icon: SiIntellijidea },
-  { name: 'Render', icon: SiRender },
-  { name: 'Vercel', icon: SiVercel },
+export const toolsVersionControl = [
+  { name: 'Git', icon: FaGithub },
   { name: 'Postman', icon: SiPostman },
-  { name: 'JIRA', icon: SiJira },
+  { name: 'Jenkins', icon: SiJenkins },
+  { name: 'Docker (Basic)', icon: SiDocker },
+  { name: 'GitHub', icon: FaGithub },
+  { name: 'Git-Lab', icon: SiGitlab },
+];
+
+export const conceptSkills = [
+  { name: 'SDLC', icon: FaProjectDiagram },
+  { name: 'Agile', icon: FaProjectDiagram },
+  { name: 'System Integration', icon: FaPuzzlePiece },
+  { name: 'DSA', icon: FaStream },
+  { name: 'System Design', icon: FaSitemap },
 ];
 
 // --- PROJECTS ---

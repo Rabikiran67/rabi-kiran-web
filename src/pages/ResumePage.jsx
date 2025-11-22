@@ -74,6 +74,15 @@ const LazyPDFViewer = ({ src, title, className }) => {
 };
 
 const ResumePage = () => {
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = personalInfo.resume;
+    link.download = 'Rabi-Kiran-Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section className="relative py-20 md:py-32 overflow-hidden">
       <ShootingStars />
@@ -96,14 +105,13 @@ const ResumePage = () => {
         >
           Here you can view or download my latest resume.
         </motion.p>
-        <a
-            href={personalInfo.resume}
-            download="M-Rabi-Kiran-Resume.pdf"
-            className="inline-flex items-center gap-2 bg-primary text-white py-3 px-8 rounded-lg font-semibold hover:bg-opacity-80 transition-all duration-300"
+        <button
+            onClick={handleDownload}
+            className="inline-flex items-center gap-2 bg-primary text-white py-3 px-8 rounded-lg font-semibold hover:bg-opacity-80 transition-all duration-300 cursor-pointer"
         >
             <FaDownload />
             Download Resume
-        </a>
+        </button>
         <motion.div 
           className="mt-12 w-full max-w-4xl mx-auto h-[75vh] rounded-lg overflow-hidden shadow-lg"
           initial={{ opacity: 0, y: 20 }}
